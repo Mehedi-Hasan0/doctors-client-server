@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 5000;
@@ -17,7 +18,7 @@ async function run() {
     try {
         const appoitmentOptionsCollention = client.db("doctorsPortal").collection("appointmentOptions");
         const bookingsCollection = client.db('doctorsPortal').collection('bookings');
-
+        const usersCollection = client.db('doctorsPortal').collection('users');
 
         app.get('/appointmentOptions', async (req, res) => {
             const date = req.query.date;
@@ -63,6 +64,12 @@ async function run() {
 
             const result = await bookingsCollection.insertOne(booking);
             res.send(result);
+        });
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
         })
     }
     finally {
@@ -70,12 +77,6 @@ async function run() {
     }
 }
 run().catch(err => console.log(err))
-
-
-
-
-
-
 
 
 app.get('/', async (req, res) => {
