@@ -69,6 +69,12 @@ async function run() {
             const query = { email: email };
             const bookings = await bookingsCollection.find(query).toArray();
             res.send(bookings);
+        });
+
+        app.get('/appointmentSpecialty', async (req, res) => {
+            const query = {};
+            const result = await appoitmentOptionsCollention.find(query).project({ name: 1 }).toArray();
+            res.send(result);
         })
 
         app.post('/bookings', async (req, res) => {
